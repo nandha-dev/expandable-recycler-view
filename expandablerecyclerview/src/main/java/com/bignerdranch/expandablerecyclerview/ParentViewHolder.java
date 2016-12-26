@@ -1,9 +1,13 @@
 package com.bignerdranch.expandablerecyclerview;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.bignerdranch.expandablerecyclerview.model.Parent;
@@ -18,12 +22,18 @@ import com.bignerdranch.expandablerecyclerview.model.Parent;
  * @version 1.0
  * @since 5/27/2015
  */
-public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewHolder implements View.OnTouchListener {
     @Nullable
     private ParentViewHolderExpandCollapseListener mParentViewHolderExpandCollapseListener;
     private boolean mExpanded;
+    private Context mContext;
     P mParent;
     ExpandableRecyclerAdapter mExpandableAdapter;
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
+    }
 
     /**
      * Empowers {@link com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter}
@@ -54,9 +64,10 @@ public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewH
      * @param itemView The {@link View} being hosted in this ViewHolder
      */
     @UiThread
-    public ParentViewHolder(@NonNull View itemView) {
+    public ParentViewHolder(Context context, @NonNull View itemView) {
         super(itemView);
         mExpanded = false;
+        mContext = context;
     }
 
     /**
@@ -86,12 +97,32 @@ public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewH
     }
 
     /**
-     * Sets a {@link android.view.View.OnClickListener} on the entire parent
+     * Sets a {@link android.view.View.OnTouchListener} on the entire parent
+     * As OnClickListener is been called even on swipe OnTouchListener is used
      * view to trigger expansion.
      */
     @UiThread
     public void setMainItemClickToExpand() {
-        itemView.setOnClickListener(this);
+        final GestureDetector
+                gestureDetector = new GestureDetector(mContext, new SingleTapGestureDetector());
+        itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    onParentClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void onParentClick() {
+        if (mExpanded) {
+            collapseView();
+        } else {
+            expandView();
+        }
     }
 
     /**
@@ -142,24 +173,6 @@ public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewH
     }
 
     /**
-     * {@link android.view.View.OnClickListener} to listen for click events on
-     * the entire parent {@link View}.
-     * <p>
-     * Only registered if {@link #shouldItemViewClickToggleExpansion()} is true.
-     *
-     * @param v The {@link View} that is the trigger for expansion
-     */
-    @Override
-    @UiThread
-    public void onClick(View v) {
-        if (mExpanded) {
-            collapseView();
-        } else {
-            expandView();
-        }
-    }
-
-    /**
      * Used to determine whether a click in the entire parent {@link View}
      * should trigger row expansion.
      * <p>
@@ -197,6 +210,16 @@ public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewH
 
         if (mParentViewHolderExpandCollapseListener != null) {
             mParentViewHolderExpandCollapseListener.onParentCollapsed(getAdapterPosition());
+        }
+    }
+
+    /**
+     * Gesture Detector used to detect whether the Gesture is single tap or not
+     */
+    private class SingleTapGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return true;
         }
     }
 }
