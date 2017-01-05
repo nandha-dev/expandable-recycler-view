@@ -1,6 +1,7 @@
 package com.bignerdranch.expandablerecyclerviewsample.linear.vertical;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -20,8 +21,8 @@ public class RecipeViewHolder extends ParentViewHolder {
     private final ImageView mArrowExpandImageView;
     private TextView mRecipeTextView;
 
-    public RecipeViewHolder(@NonNull View itemView) {
-        super(itemView);
+    public RecipeViewHolder(@NonNull Context context, @NonNull View itemView) {
+        super(context, itemView);
         mRecipeTextView = (TextView) itemView.findViewById(R.id.recipe_textview);
 
         mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.arrow_expand_imageview);
@@ -50,7 +51,7 @@ public class RecipeViewHolder extends ParentViewHolder {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             RotateAnimation rotateAnimation;
             if (expanded) { // rotate clockwise
-                 rotateAnimation = new RotateAnimation(ROTATED_POSITION,
+                rotateAnimation = new RotateAnimation(ROTATED_POSITION,
                         INITIAL_POSITION,
                         RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                         RotateAnimation.RELATIVE_TO_SELF, 0.5f);

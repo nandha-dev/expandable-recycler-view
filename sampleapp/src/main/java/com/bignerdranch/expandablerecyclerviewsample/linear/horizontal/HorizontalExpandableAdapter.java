@@ -2,7 +2,6 @@ package com.bignerdranch.expandablerecyclerviewsample.linear.horizontal;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ public class HorizontalExpandableAdapter extends ExpandableRecyclerAdapter<Horiz
         HorizontalChild, HorizontalParentViewHolder, HorizontalChildViewHolder> {
 
     private LayoutInflater mInflater;
+    private Context mContext;
 
     /**
      * Public primary constructor.
@@ -28,6 +28,7 @@ public class HorizontalExpandableAdapter extends ExpandableRecyclerAdapter<Horiz
      */
     public HorizontalExpandableAdapter(Context context, @NonNull List<HorizontalParent> parentItemList) {
         super(parentItemList);
+        mContext = context;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -43,7 +44,7 @@ public class HorizontalExpandableAdapter extends ExpandableRecyclerAdapter<Horiz
     @Override
     public HorizontalParentViewHolder onCreateParentViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.list_item_parent_horizontal, parent, false);
-        return new HorizontalParentViewHolder(view);
+        return new HorizontalParentViewHolder(mContext, view);
     }
 
     /**
@@ -66,7 +67,7 @@ public class HorizontalExpandableAdapter extends ExpandableRecyclerAdapter<Horiz
      * parent view should be performed here.
      *
      * @param parentViewHolder the ViewHolder of the parent item created in OnCreateParentViewHolder
-     * @param parentPosition the position in the RecyclerView of the item
+     * @param parentPosition   the position in the RecyclerView of the item
      */
     @UiThread
     @Override
@@ -80,7 +81,7 @@ public class HorizontalExpandableAdapter extends ExpandableRecyclerAdapter<Horiz
      * child view should be performed here.
      *
      * @param childViewHolder the ViewHolder of the child item created in OnCreateChildViewHolder
-     * @param childPosition the position in the RecyclerView of the item
+     * @param childPosition   the position in the RecyclerView of the item
      */
     @UiThread
     @Override

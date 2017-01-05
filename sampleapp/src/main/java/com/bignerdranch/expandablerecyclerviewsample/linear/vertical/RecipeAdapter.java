@@ -19,11 +19,13 @@ public class RecipeAdapter extends ExpandableRecyclerAdapter<Recipe, Ingredient,
     private static final int CHILD_VEGETARIAN = 2;
     private static final int CHILD_NORMAL = 3;
 
+    private Context mContext;
     private LayoutInflater mInflater;
     private List<Recipe> mRecipeList;
 
     public RecipeAdapter(Context context, @NonNull List<Recipe> recipeList) {
         super(recipeList);
+        mContext = context;
         mRecipeList = recipeList;
         mInflater = LayoutInflater.from(context);
     }
@@ -42,7 +44,7 @@ public class RecipeAdapter extends ExpandableRecyclerAdapter<Recipe, Ingredient,
                 recipeView = mInflater.inflate(R.layout.vegetarian_recipe_view, parentViewGroup, false);
                 break;
         }
-        return new RecipeViewHolder(recipeView);
+        return new RecipeViewHolder(mContext, recipeView);
     }
 
     @UiThread
