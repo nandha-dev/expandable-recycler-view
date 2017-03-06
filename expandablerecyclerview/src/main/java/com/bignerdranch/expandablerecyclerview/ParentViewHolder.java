@@ -63,10 +63,10 @@ public class ParentViewHolder<P extends Parent<C>, C> extends RecyclerView.ViewH
      * @param itemView The {@link View} being hosted in this ViewHolder
      */
     @UiThread
-    public ParentViewHolder(@NonNull Context context, @NonNull View itemView) {
+    public ParentViewHolder(@NonNull View itemView) {
         super(itemView);
         mExpanded = false;
-        mContext = context;
+        mContext = itemView.getContext();
         itemView.setClickable(true);
     }
 

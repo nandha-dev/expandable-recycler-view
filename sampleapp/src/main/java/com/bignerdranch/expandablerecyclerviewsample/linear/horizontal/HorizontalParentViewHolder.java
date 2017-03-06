@@ -40,7 +40,7 @@ public class HorizontalParentViewHolder extends ParentViewHolder {
      * @param itemView the view of the parent item. Find/modify views using this.
      */
     public HorizontalParentViewHolder(@NonNull final Context context, @NonNull View itemView) {
-        super(context, itemView);
+        super(itemView);
 
         mNumberTextView = (TextView) itemView.findViewById(R.id.list_item_parent_horizontal_number_textView);
         mDataTextView = (TextView) itemView.findViewById(R.id.list_item_parent_horizontal_parent_textView);

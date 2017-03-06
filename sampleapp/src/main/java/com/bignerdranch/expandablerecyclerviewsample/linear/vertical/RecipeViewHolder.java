@@ -22,7 +22,7 @@ public class RecipeViewHolder extends ParentViewHolder {
     private TextView mRecipeTextView;
 
     public RecipeViewHolder(@NonNull Context context, @NonNull View itemView) {
-        super(context, itemView);
+        super(itemView);
         mRecipeTextView = (TextView) itemView.findViewById(R.id.recipe_textview);
 
         mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.arrow_expand_imageview);
